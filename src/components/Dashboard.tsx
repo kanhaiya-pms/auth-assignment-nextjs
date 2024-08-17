@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const id = localStorage.getItem("userId")
+  const id = window.localStorage.getItem("userId")
 
   
 
