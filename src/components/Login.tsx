@@ -1,18 +1,18 @@
-"use client"
-import { Form, Input, Button, message } from 'antd';
-import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+"use client";
+import { Form, Input, Button, message } from "antd";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const onFinish = async (values: any) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8081/users/login", {
+      const response = await fetch("https://auth-assignment-nestjs.vercel.app/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,6 +29,9 @@ const LoginForm = () => {
         throw new Error(apiRes.message || "Something went wrong");
       }
 
+      const userId = apiRes._id;
+      localStorage.setItem("userId", userId);
+
       message.success("Login successfully");
       router.push("/");
     } catch (error: any) {
@@ -41,18 +44,14 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-green-200">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
-        <Form
-          name="login"
-          onFinish={onFinish}
-          layout="vertical"
-        >
+        <Form name="login" onFinish={onFinish} layout="vertical">
           <Form.Item
             label="Username"
             name="username"
-            rules={[{ required: true, message: 'Please enter your username' }]}
+            rules={[{ required: true, message: "Please enter your username" }]}
           >
             <Input placeholder="Enter your username" />
           </Form.Item>
@@ -60,7 +59,7 @@ const LoginForm = () => {
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: 'Please enter your password' }]}
+            rules={[{ required: true, message: "Please enter your password" }]}
           >
             <Input.Password placeholder="Enter your password" />
           </Form.Item>
@@ -77,11 +76,15 @@ const LoginForm = () => {
           </Form.Item>
 
           <div className="flex justify-between items-center">
-            <Link href="/forgot-password">
-              <span className="text-blue-500 hover:text-blue-700">Forgot Password?</span>
+            <Link href="/forgetpassword">
+              <span className="text-blue-500 hover:text-blue-700">
+                Forgot Password?
+              </span>
             </Link>
             <Link href="/signup">
-              <span className="text-blue-500 hover:text-blue-700">Switch to Signup</span>
+              <span className="text-blue-500 hover:text-blue-700">
+                Switch to Signup
+              </span>
             </Link>
           </div>
         </Form>

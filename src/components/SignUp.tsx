@@ -8,13 +8,11 @@ const SignupForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
- 
-
   const onFinish = async (values: any) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8081/users/signup", {
+      const response = await fetch("https://auth-assignment-nestjs.vercel.app/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,6 +20,7 @@ const SignupForm = () => {
         body: JSON.stringify({
           name: values.name,
           userName: values.username,
+          email: values.email,
           password: values.password,
         }),
       });
@@ -33,7 +32,7 @@ const SignupForm = () => {
       }
 
       message.success("Account created successfully");
-      router.push("/dashboard");
+      router.push("/login");
     } catch (error: any) {
       const errorMessage = error.message || "Something went wrong";
       console.log("onFinish error:", errorMessage);
@@ -44,7 +43,7 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-green-200">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">
           Sign Up
@@ -67,6 +66,14 @@ const SignupForm = () => {
           </Form.Item>
 
           <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: "Please enter your email" }]}
+          >
+            <Input type="email" placeholder="Enter your email" />
+          </Form.Item>
+
+          <Form.Item
             label="Password"
             name="password"
             rules={[
@@ -75,10 +82,8 @@ const SignupForm = () => {
                 message: "Please enter your password",
               },
               {
-                pattern:
-                  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7}$/,
-                message:
-                  "must be strong password! and length equal to seven",
+                pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
+                message: "must be strong password! and length equal to seven",
               },
             ]}
           >
@@ -97,7 +102,9 @@ const SignupForm = () => {
           </Form.Item>
           <div className="flex justify-end items-center">
             <Link href="/login">
-              <span className="text-blue-500 hover:text-blue-700">Switch to login</span>
+              <span className="text-blue-500 hover:text-blue-700">
+                Switch to login
+              </span>
             </Link>
           </div>
         </Form>
