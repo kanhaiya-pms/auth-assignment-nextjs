@@ -3,40 +3,34 @@ import { Form, Input, Button, message } from "antd";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Api } from "@/utils/Api";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const api = new Api()
 
   const onFinish = async (values: any) => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://auth-assignment-nestjs.vercel.app/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userName: values.username,
-          password: values.password,
-        }),
-      });
+      const payload = {
+        userName: values.username,
+        password: values.password,
+      }
+      const response = await api.users.login(payload)
 
-      const apiRes = await response.json();
-
-      if (!response.ok) {
-        throw new Error(apiRes.message || "Something went wrong");
+      if (!response) {
+        throw new Error(response.message || "Something went wrong");
       }
 
-      const userId = apiRes._id;
+      const userId = response._id;
       localStorage.setItem("userId", userId);
 
       message.success("Login successfully");
       router.push("/dashboard");
     } catch (error: any) {
       const errorMessage = error.message || "Something went wrong";
-      console.log("onFinish error:", errorMessage);
       message.error(errorMessage);
     } finally {
       setLoading(false);

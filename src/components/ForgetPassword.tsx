@@ -1,4 +1,5 @@
 "use client";
+import { Api } from "@/utils/Api";
 import { Form, Input, Button, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,29 +9,23 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter()
+  const api = new Api()
 
   const handleEmailSubmit = async (values: { email: string }) => {
     debugger
     setLoading(true);
     setEmail(values.email);
     try {
-      const response = await fetch("https://auth-assignment-nestjs.vercel.app/users/forgetpass", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: values.email,
-        }),
-      });
+      const payload = {
+        email: values.email,
+      }
+      const response = await api.users.forgetEmail(payload)
 
-      const apiRes = await response.json();
-
-      if (!response.ok) {
-        throw new Error(apiRes.message || "Something went wrong");
+      if (!response) {
+        throw new Error(response.message || "Something went wrong");
       }
       setStep(2);
-      message.success(apiRes.message)
+      message.success(response.message)
     } catch (error: any) {
         const errorMessage = error.message || "Something went wrong";
         console.log("onFinish error:", errorMessage);
@@ -43,24 +38,17 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (values: any) => {
     setLoading(true);
     try {
-        const response = await fetch("https://auth-assignment-nestjs.vercel.app/users/verifyotp", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: email,
-              otp: values.otp,
-              password: values.password,
-            }),
-          });
+      const payload = {
+        email: email,
+        otp: values.otp,
+        password: values.password,
+      }
+        const response = await api.users.verifyOtp(payload)
       
-          const apiRes = await response.json();
-      
-          if (!response.ok) {
-            throw new Error(apiRes.message || "Something went wrong");
+          if (!response) {
+            throw new Error(response.message || "Something went wrong");
           }
-          message.success(apiRes.message)
+          message.success(response.message)
           router.push("/login")
     } catch (error :any) {
         const errorMessage = error.message || "Something went wrong";

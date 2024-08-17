@@ -1,4 +1,5 @@
 "use client";
+import { Api } from "@/utils/Api";
 import { Form, Input, Button, message } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,32 +8,26 @@ import { useState } from "react";
 const SignupForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const api = new Api()
 
   const onFinish = async (values: any) => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://auth-assignment-nestjs.vercel.app/users/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: values.name,
-          userName: values.username,
-          email: values.email,
-          password: values.password,
-        }),
-      });
+      const payload = {
+        name: values.name,
+        userName: values.username,
+        email: values.email,
+        password: values.password,
+      }
+      const response = await api.users.createUser(payload)
 
-      const apiRes = await response.json();
-
-      if (!response.ok) {
-        throw new Error(apiRes.message || "Something went wrong");
+      if (!response) {
+        throw new Error(response.message || "Something went wrong");
       }
 
       message.success("Account created successfully");
-      router.push("/");
+      router.push("/login");
     } catch (error: any) {
       const errorMessage = error.message || "Something went wrong";
       console.log("onFinish error:", errorMessage);
@@ -101,7 +96,7 @@ const SignupForm = () => {
             </Button>
           </Form.Item>
           <div className="flex justify-end items-center">
-            <Link href="/">
+            <Link href="/login">
               <span className="text-blue-500 hover:text-blue-700">
                 Switch to login
               </span>
