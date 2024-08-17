@@ -12,11 +12,11 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const id = window.localStorage.getItem("userId")
+  
 
   
 
-  const fetchData = async () =>{
+  const fetchData = async (id:string) =>{
     setLoading(true)
    try {
     const api = await fetch(`https://auth-assignment-nestjs.vercel.app/users/${id}`, {
@@ -34,7 +34,7 @@ const Dashboard = () => {
     setData(apiRes)
    } catch (error) {
     console.log(error);
-    router.push("/login");
+    // router.push("/login");
     
    } finally {
     setLoading(false)
@@ -48,10 +48,14 @@ const Dashboard = () => {
   }
 
   useEffect(()=>{
-    if (!id) {
-      router.push("/login");
+    if (typeof window !== 'undefined') {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        router.push('/login'); // or whatever route you want to redirect to
+      } else{
+      fetchData(userId);
+      }
     }
-    fetchData();
   },[])
 
   

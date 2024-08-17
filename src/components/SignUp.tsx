@@ -32,7 +32,7 @@ const SignupForm = () => {
       }
 
       message.success("Account created successfully");
-      router.push("/login");
+      router.push("/");
     } catch (error: any) {
       const errorMessage = error.message || "Something went wrong";
       console.log("onFinish error:", errorMessage);
@@ -101,7 +101,7 @@ const SignupForm = () => {
             </Button>
           </Form.Item>
           <div className="flex justify-end items-center">
-            <Link href="/login">
+            <Link href="/">
               <span className="text-blue-500 hover:text-blue-700">
                 Switch to login
               </span>

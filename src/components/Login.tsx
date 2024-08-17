@@ -30,7 +30,7 @@ const LoginForm = () => {
       }
 
       const userId = apiRes._id;
-      window.localStorage.setItem("userId", userId);
+      localStorage.setItem("userId", userId);
 
       message.success("Login successfully");
       router.push("/dashboard");
