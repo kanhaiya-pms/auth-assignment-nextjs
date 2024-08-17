@@ -33,7 +33,7 @@ const LoginForm = () => {
       window.localStorage.setItem("userId", userId);
 
       message.success("Login successfully");
-      router.push("/");
+      router.push("/dashboard");
     } catch (error: any) {
       const errorMessage = error.message || "Something went wrong";
       console.log("onFinish error:", errorMessage);

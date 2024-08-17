@@ -1,12 +1,13 @@
 import Dashboard from "@/components/Dashboard";
-import { redirect } from "next/navigation";
+import LoginForm from "@/components/Login";
 
 function Home() {
 
 
 
   return (
-   <Dashboard/>
+  //  <Dashboard/>
+  <LoginForm/>
   );
 }
 
