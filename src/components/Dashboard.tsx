@@ -108,6 +108,16 @@ const Dashboard = () => {
     message.success("created successful");
   };
 
+  if (modal2Open) {
+    const fetcheditdata = async () =>{
+      const data = await api.leads.getById(editId)
+    form.setFieldsValue(data)
+    }
+    fetcheditdata()
+  } else {
+    form.setFieldsValue("")
+  }
+
   const fetchLeads = async () => {
     setLoading(true);
     console.log(userId);

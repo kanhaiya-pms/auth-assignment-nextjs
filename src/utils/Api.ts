@@ -90,6 +90,8 @@ export class Api {
         this.requests.post(`leads/${id}`, items),
     getMy: (id: string) =>
         this.requests.get(`leads/my/${id}`),
+    getById: (id: string) =>
+      this.requests.get(`leads/${id}`),
     delete: (id: string) =>
         this.requests.delete(`leads/${id}`),
     update: (id: string, items: any) =>
