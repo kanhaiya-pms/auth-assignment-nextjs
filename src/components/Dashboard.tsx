@@ -154,7 +154,7 @@ const Dashboard = () => {
             }}
           />
           <Modal
-            title="Vertically centered modal dialog"
+            title="Update lead"
             centered
             open={modal2Open}
             onOk={() => form.submit()}
@@ -309,7 +309,11 @@ const Dashboard = () => {
           <Menu.Item key="2" icon={<UsergroupAddOutlined />}>
             Create Lead
           </Menu.Item>
-          <Menu.Item key="3" onClick={fetchLeads} icon={<RightCircleOutlined />}>
+          <Menu.Item
+            key="3"
+            onClick={fetchLeads}
+            icon={<RightCircleOutlined />}
+          >
             Leads
           </Menu.Item>
           <Menu.Item key="4" icon={<LogoutOutlined />}>
@@ -320,7 +324,13 @@ const Dashboard = () => {
       <Layout>
         <Header className="bg-white shadow-md flex justify-between items-center px-6">
           <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
-          <div className="text-gray-600">Welcome, {data?.userName}</div>
+          <div className="text-gray-600">
+            Welcome - {" "}
+            <span className="font-bold text-lg text-pink-500">
+              {data?.userName.slice(0, 1).toUpperCase() +
+                data?.userName.slice(1)}
+            </span>
+          </div>
         </Header>
         <Content className="p-6 bg-green-200">{renderContent()}</Content>
         <Footer className="text-center text-gray-600 bg-white">

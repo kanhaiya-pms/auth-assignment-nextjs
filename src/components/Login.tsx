@@ -8,17 +8,37 @@ import { Api } from "@/utils/Api";
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const api = new Api()
+  const api = new Api();
+  const [captcha, setCaptcha] = useState(generateCaptcha());
+  const [captchaInput, setCaptchaInput] = useState("");
+
+  function generateCaptcha() {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    const length = 6; 
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return result;
+  }
 
   const onFinish = async (values: any) => {
+    if (captcha !== values.captcha) {
+      message.error("Incorrect captcha!")
+      setCaptcha(generateCaptcha())
+      return 
+    }
     setLoading(true);
 
     try {
       const payload = {
         userName: values.username,
         password: values.password,
-      }
-      const response = await api.users.login(payload)
+      };
+      const response = await api.users.login(payload);
 
       if (!response) {
         throw new Error(response.message || "Something went wrong");
@@ -56,6 +76,18 @@ const LoginForm = () => {
             rules={[{ required: true, message: "Please enter your password" }]}
           >
             <Input.Password placeholder="Enter your password" />
+          </Form.Item>
+
+          <Form.Item
+            label={`Please enter the following text: ${captcha}`}
+            name="captcha"
+            rules={[{ required: true, message: "Please enter the captcha" }]}
+          >
+            <Input
+              placeholder="Enter the captcha"
+              value={captchaInput}
+              onChange={(e) => setCaptchaInput(e.target.value)}
+            />
           </Form.Item>
 
           <Form.Item>
