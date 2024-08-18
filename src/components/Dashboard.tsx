@@ -18,6 +18,8 @@ import {
   LogoutOutlined,
   EditTwoTone,
   DeleteTwoTone,
+  UsergroupAddOutlined,
+  RightCircleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { Api } from "@/utils/Api";
@@ -35,12 +37,12 @@ const Dashboard = () => {
   const router = useRouter();
   const api = new Api();
   const [form] = Form.useForm();
-  const [editId, setEditId] = useState("")
+  const [editId, setEditId] = useState("");
 
   const fetchData = async (id: string) => {
     setLoading(true);
     try {
-      const data = await api.users.getById(id)
+      const data = await api.users.getById(id);
       console.log(data);
       if (!data) {
         throw new Error();
@@ -48,7 +50,7 @@ const Dashboard = () => {
       setData(data);
     } catch (error) {
       console.log(error);
-      router.push("/login")
+      router.push("/login");
     } finally {
       setLoading(false);
     }
@@ -61,7 +63,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setLoading(true)
+      setLoading(true);
       const userId = localStorage.getItem("userId");
       if (!userId) {
         router.push("/login");
@@ -81,11 +83,10 @@ const Dashboard = () => {
   };
 
   const handleFormSubmit = async (values: any) => {
-   setLoading(true)
+    setLoading(true);
     await api.leads.create(userId, values);
-    setLoading(false)
+    setLoading(false);
     message.success("created successful");
-   
   };
 
   const fetchLeads = async () => {
@@ -95,7 +96,7 @@ const Dashboard = () => {
     setLeads(data);
   };
 
-  const handleEdit = async (values: any,leadId: string) => {
+  const handleEdit = async (values: any, leadId: string) => {
     await api.leads.update(leadId, values);
     setModal2Open(false);
     fetchLeads();
@@ -148,8 +149,8 @@ const Dashboard = () => {
           <EditTwoTone
             style={{ fontSize: "22px" }}
             onClick={() => {
-              setModal2Open(true)
-              setEditId(id)
+              setModal2Open(true);
+              setEditId(id);
             }}
           />
           <Modal
@@ -159,7 +160,11 @@ const Dashboard = () => {
             onOk={() => form.submit()}
             onCancel={() => setModal2Open(false)}
           >
-            <Form form={form} layout="vertical" onFinish={(item)=>handleEdit( item,editId)}>
+            <Form
+              form={form}
+              layout="vertical"
+              onFinish={(item) => handleEdit(item, editId)}
+            >
               <Form.Item
                 name="name"
                 label="Name"
@@ -197,17 +202,11 @@ const Dashboard = () => {
                 rules={[{ required: true, message: "Please select a product" }]}
               >
                 <Select mode="multiple" placeholder="Select product(s)">
-                  <Select.Option value="product1">Product 1</Select.Option>
-                  <Select.Option value="product2">Product 2</Select.Option>
-                  <Select.Option value="product3">Product 3</Select.Option>
+                  <Select.Option value="product A ">Product A</Select.Option>
+                  <Select.Option value="product B ">Product B</Select.Option>
+                  <Select.Option value="product C ">Product C</Select.Option>
                 </Select>
               </Form.Item>
-
-              {/* <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Update
-          </Button>
-        </Form.Item> */}
             </Form>
           </Modal>
           <DeleteTwoTone
@@ -225,10 +224,7 @@ const Dashboard = () => {
       case "2":
         return (
           <Card loading={loading} className="h-full">
-            <Form
-              layout="vertical"
-              onFinish={handleFormSubmit}
-            >
+            <Form layout="vertical" onFinish={handleFormSubmit}>
               <Form.Item
                 label="Name"
                 name="name"
@@ -239,14 +235,20 @@ const Dashboard = () => {
               <Form.Item
                 label="Number"
                 name="phone"
-                rules={[{required: true, message: "Please enter number" }]}
+                rules={[{ required: true, message: "Please enter number" }]}
               >
                 <Input />
               </Form.Item>
               <Form.Item
                 label="Email ID"
                 name="email"
-                rules={[{type: "email", required: true, message: "Please enter email" }]}
+                rules={[
+                  {
+                    type: "email",
+                    required: true,
+                    message: "Please enter email",
+                  },
+                ]}
               >
                 <Input />
               </Form.Item>
@@ -256,9 +258,9 @@ const Dashboard = () => {
                 rules={[{ required: true, message: "Please select a product" }]}
               >
                 <Select mode="multiple" placeholder="Select product(s)">
-                  <Select.Option value="product1">Product 1</Select.Option>
-                  <Select.Option value="product2">Product 2</Select.Option>
-                  <Select.Option value="product3">Product 3</Select.Option>
+                  <Select.Option value="product A ">Product A</Select.Option>
+                  <Select.Option value="product B ">Product B</Select.Option>
+                  <Select.Option value="product C ">Product C</Select.Option>
                 </Select>
               </Form.Item>
               <Button type="primary" block htmlType="submit">
@@ -304,10 +306,10 @@ const Dashboard = () => {
           <Menu.Item key="1" icon={<HomeOutlined />}>
             Home
           </Menu.Item>
-          <Menu.Item key="2" icon={<HomeOutlined />}>
+          <Menu.Item key="2" icon={<UsergroupAddOutlined />}>
             Create Lead
           </Menu.Item>
-          <Menu.Item key="3" onClick={fetchLeads} icon={<HomeOutlined />}>
+          <Menu.Item key="3" onClick={fetchLeads} icon={<RightCircleOutlined />}>
             Leads
           </Menu.Item>
           <Menu.Item key="4" icon={<LogoutOutlined />}>
