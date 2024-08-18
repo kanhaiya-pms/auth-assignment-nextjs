@@ -23,6 +23,7 @@ import {
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { Api } from "@/utils/Api";
+import moment from "moment";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -139,6 +140,7 @@ const Dashboard = () => {
       title: "createdAt",
       dataIndex: "createdAt",
       key: "createdAt",
+      render: (text: any) => moment(text).format("MMM DD YYYY")
     },
     {
       title: "Action",
