@@ -39,6 +39,24 @@ const Dashboard = () => {
   const api = new Api();
   const [form] = Form.useForm();
   const [editId, setEditId] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [filteredLeads, setFilteredLeads] = useState(leads);
+
+  const handleSearch = (e: any) => {
+    const value = e.target.value.toLowerCase();
+    setSearchText(value);
+
+    if (value.length > 0) {
+      const filteredData = leads.filter((lead) =>
+        Object.keys(lead).some((key) =>
+          String(lead[key]).toLowerCase().includes(value)
+        )
+      );
+      setFilteredLeads(filteredData);
+    } else {
+      setFilteredLeads(leads); 
+    }
+  };
 
   const fetchData = async (id: string) => {
     setLoading(true);
@@ -91,10 +109,13 @@ const Dashboard = () => {
   };
 
   const fetchLeads = async () => {
+    setLoading(true);
     console.log(userId);
 
     const data = await api.leads.getMy(userId);
+    setLoading(false)
     setLeads(data);
+    setFilteredLeads(data)
   };
 
   const handleEdit = async (values: any, leadId: string) => {
@@ -112,9 +133,9 @@ const Dashboard = () => {
 
   const columns = [
     {
-      title: "Sr No.",
-      dataIndex: "name",
-      key: "name",
+      title: "Id",
+      dataIndex: "_id",
+      key: "_id",
     },
     {
       title: "Name",
@@ -140,7 +161,7 @@ const Dashboard = () => {
       title: "createdAt",
       dataIndex: "createdAt",
       key: "createdAt",
-      render: (text: any) => moment(text).format("MMM DD YYYY")
+      render: (text: any) => moment(text).format("MMM DD YYYY"),
     },
     {
       title: "Action",
@@ -274,7 +295,13 @@ const Dashboard = () => {
       case "3":
         return (
           <Card loading={loading} className="h-full">
-            <Table dataSource={leads} columns={columns} />
+            <Input
+              placeholder="Search leads"
+              value={searchText}
+              onChange={handleSearch}
+              style={{ marginBottom: 16 }}
+            />
+            <Table loading={loading} dataSource={filteredLeads} columns={columns} />
           </Card>
         );
       default:
@@ -327,7 +354,7 @@ const Dashboard = () => {
         <Header className="bg-white shadow-md flex justify-between items-center px-6">
           <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
           <div className="text-gray-600">
-            Welcome - {" "}
+            Welcome -{" "}
             <span className="font-bold text-lg text-pink-500">
               {data?.userName.slice(0, 1).toUpperCase() +
                 data?.userName.slice(1)}
