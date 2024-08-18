@@ -1,6 +1,6 @@
 
-// const API_ROOT = "https://auth-assignment-nestjs.vercel.app/"
-const API_ROOT = "http://localhost:8080/"
+const API_ROOT = "https://auth-assignment-nestjs.vercel.app/"
+// const API_ROOT = "http://localhost:8080/"
 
 
 export class Api {
